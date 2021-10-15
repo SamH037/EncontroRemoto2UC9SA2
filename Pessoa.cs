@@ -4,13 +4,9 @@ namespace cadastroPessoa
     {
         public string nome { get; set; }
         
-        public string endereco { get; set; }
+        public Endereco endereco { get; set; }
         
-        public bool enderecoComercial { get; set; }
-        
-        public void PagarImposto(float salario){
-            
-        }
+        public abstract void PagarImposto(float salario);
         
     }
 }
