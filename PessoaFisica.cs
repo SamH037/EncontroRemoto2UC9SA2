@@ -7,7 +7,7 @@ namespace cadastroPessoa
         public string cpf { get; set; }
 
         public DateTime dataNascimento { get; set; }
-        
+
         public override void PagarImposto(float salario){
 
         }
