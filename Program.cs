@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading;
 
 namespace cadastroPessoa
@@ -54,6 +53,7 @@ namespace cadastroPessoa
                         novapFisica.endereco = endPf;
                         novapFisica.cpf = "123456789";
                         novapFisica.nome = "João";
+                        novapFisica.rendimento = 1500;
                         novapFisica.dataNascimento = new DateTime(1992, 01, 25);
                         // aqui acontece a consulta dos valores recebidos da pessoa cadastrada
                         Console.WriteLine($"Rua: {novapFisica.endereco.logradouro}, casa {novapFisica.endereco.numero}, {novapFisica.endereco.complemento}");
@@ -62,9 +62,7 @@ namespace cadastroPessoa
 
                         if (idadeValida == true)
                         {
-
                             Console.WriteLine("Cadastro aprovado!");
-
                         }
                         else
                         {
@@ -72,6 +70,10 @@ namespace cadastroPessoa
                             Console.WriteLine("Cadastro reprovado, idade inválida!");
 
                         }
+                        // aqui chamamos o método normalmente, utilizando o objeto que criamos para chamar métodos
+                        Console.WriteLine(pFisica.PagarImposto(novapFisica.rendimento));
+
+
                         break;
 
                     case "2":
@@ -89,6 +91,7 @@ namespace cadastroPessoa
                         novaPjuridica.endereco = endPj;
                         novaPjuridica.cnpj = "34567890000199";
                         novaPjuridica.RazaoSocial = "pessoajuridica";
+                        novaPjuridica.rendimento = 10000.10f;
                         // por padrão, quando se coloca um "if", ele já valida se é true. se colocar "!", ele valida se é falso
                         if (!pJuridica.ValidarCNPJ(novaPjuridica.cnpj))
                         {
@@ -98,6 +101,9 @@ namespace cadastroPessoa
                         {
                             Console.WriteLine("CNPJ Válido");
                         }
+
+                        Console.WriteLine(pJuridica.PagarImposto(novaPjuridica.rendimento));
+
                         break;
 
                     case "0":
