@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace cadastroPessoa
@@ -8,6 +9,9 @@ namespace cadastroPessoa
         static void Main(string[] args)
         {
             string opcao;
+            // lista criada de pessoas fisicas, que irão receber os valores registrados pelo usuário
+            List<PessoaFisica> listaPf = new List<PessoaFisica>();
+            List<PessoaJuridica> listaPj = new List<PessoaJuridica>();
 
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -16,102 +20,223 @@ namespace cadastroPessoa
 =================================================
 │       Bem vindo ao Sistema de cadastro de     │
 │           pessoas Fisica e Juridica           │
-=================================================
-");
+================================================="
+);
             // aqui chamamos a função de load que criamos fora da main no final do código, e atribuimos um valor para o texto que foi declarado na função original
             LoadBar("Iniciando");
             // o "do" e "while" são a estrutura de repetição, tudo que eu quero q se repita, estará dentro deste laço
             do
             {
+                Console.Clear();
                 Console.WriteLine(@$"
 =================================================
 │            Escolha uma das Opções abaixo      │
 │-----------------------------------------------│
-│           1 - Pessoa Fisica                   │
-│           2 - Pessoa Juridica                 │
+│                 PESSOA FÍSICA                 │
+│           1 - Cadastrar Pessoa Física         │
+│           2 - Listar Pessoa Física            │
+│           3 - Remover Pessoa Física           │
+│                                               │
+│                 PESSOA JURÍDICA               │
+│           4 - Cadastrar Pessoa Jurídica       │
+│           5 - Listar Pessoa Jurídica          │
+│           6 - Remover Pessoa Jurídica         │
 │                                               │
 │           0 - Sair                            │
-=================================================
-");     // aqui a opcao recebe o valor que o usuário escreveu
-                opcao = Console.ReadLine();
+================================================="
+);     // aqui a opcao recebe o valor que o usuário escreveu
+                opcao = Console.ReadLine(); // comando usado para ler a opção que foi digitada pelo usuário
                 // switch case avalia as opções selecionadas pelo usuário
                 switch (opcao)
                 {
                     case "1":
-                        // Cria-se um objeto para poder validar o outro objeto, um objeto recebe os valores, e um para chamar o método
-                        PessoaFisica pFisica = new PessoaFisica();
 
-                        PessoaFisica novapFisica = new PessoaFisica();
+                        Console.ResetColor();
 
+                        PessoaFisica pf = new PessoaFisica();
+                        PessoaFisica novaPf = new PessoaFisica();
                         Endereco endPf = new Endereco();
 
-                        endPf.logradouro = "Serra Azul, Q35";
-                        endPf.numero = 1;
-                        endPf.complemento = "Sobradinho/DF";
-                        endPf.enderecoComercial = false;
-                        // repare que este recebeu os valores
-                        novapFisica.endereco = endPf;
-                        novapFisica.cpf = "123456789";
-                        novapFisica.nome = "João";
-                        novapFisica.rendimento = 1500;
-                        novapFisica.dataNascimento = new DateTime(1992, 01, 25);
-                        // aqui acontece a consulta dos valores recebidos da pessoa cadastrada
-                        Console.WriteLine($"Rua: {novapFisica.endereco.logradouro}, casa {novapFisica.endereco.numero}, {novapFisica.endereco.complemento}");
-                        // e aqui veja que o outro objeto está chamando a validação referente ao método
-                        bool idadeValida = pFisica.ValidarDataNascimento(pFisica.dataNascimento);
+                        Console.WriteLine($"Digite seu logradouro");
+                        endPf.logradouro = Console.ReadLine();
 
-                        if (idadeValida == true)
+                        Console.WriteLine($"Digite seu numero");
+                        endPf.numero = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine($"Digite um complemento (aperte ENTER para vazio)");
+                        endPf.complemento = Console.ReadLine();
+
+                        Console.WriteLine($"Seu endereço é Comercial? S/N");
+                        string endComercial = Console.ReadLine().ToUpper();
+
+                        if (endComercial == "S")
                         {
-                            Console.WriteLine("Cadastro aprovado!");
+                            endPf.enderecoComercial = true;
                         }
                         else
                         {
-
-                            Console.WriteLine("Cadastro reprovado, idade inválida!");
-
+                            endPf.enderecoComercial = false;
                         }
-                        // aqui chamamos o método normalmente, utilizando o objeto que criamos para chamar métodos
-                        Console.WriteLine(pFisica.PagarImposto(novapFisica.rendimento));
 
+
+                        novaPf.endereco = endPf;
+
+                        Console.WriteLine($"Digite seu CPF (Somente numeros)");
+                        novaPf.cpf = Console.ReadLine();
+
+                        Console.WriteLine($"Digite seu Nome completo");
+                        novaPf.nome = Console.ReadLine();
+
+                        Console.WriteLine($"Digite seu rendimento mensal (Somente numeros)");
+                        novaPf.rendimento = float.Parse(Console.ReadLine());
+
+                        Console.WriteLine($"Digite sua Data de Nascimento (AAAA-MM-DD)");
+                        novaPf.dataNascimento = DateTime.Parse(Console.ReadLine());
+
+                        bool idadeValida = pf.ValidarDataNascimento(novaPf.dataNascimento);
+
+                        if (idadeValida == true)
+                        {
+                            Console.WriteLine($"Cadastro Aprovado!");
+                            listaPf.Add(novaPf);
+                            Console.WriteLine($"O valor do Desconto do imposto é de: {pf.PagarImposto(novaPf.rendimento).ToString("N2")} reais");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Cadastro Reprovado!");
+                        }
 
                         break;
 
                     case "2":
-                        PessoaJuridica pJuridica = new PessoaJuridica();
 
-                        PessoaJuridica novaPjuridica = new PessoaJuridica();
-
-                        Endereco endPj = new Endereco();
-
-                        endPj.logradouro = "Q Central";
-                        endPj.numero = 5;
-                        endPj.complemento = "Banco do Brasil";
-                        endPj.enderecoComercial = true;
-
-                        novaPjuridica.endereco = endPj;
-                        novaPjuridica.cnpj = "34567890000199";
-                        novaPjuridica.RazaoSocial = "pessoajuridica";
-                        novaPjuridica.rendimento = 10000.10f;
-                        // por padrão, quando se coloca um "if", ele já valida se é true. se colocar "!", ele valida se é falso
-                        if (!pJuridica.ValidarCNPJ(novaPjuridica.cnpj))
+                        foreach (var cadaItem in listaPf)
                         {
-                            Console.WriteLine($"CNPJ Inválido");
+                            Console.WriteLine($"Nome: {cadaItem.nome}");
+                            Console.WriteLine($"CPF: {cadaItem.cpf}");
+                            Console.WriteLine($"Logradouro: {cadaItem.endereco.logradouro}");
+                            Console.WriteLine($"Numero: {cadaItem.endereco.numero}");
+                            Console.WriteLine($"Rendimento: {cadaItem.rendimento}");
+                        }
+
+                        break;
+
+                    case "3":
+
+                        Console.WriteLine($"Digite o CPF que deseja remover");
+                        string cpfProcurado = Console.ReadLine();
+
+                        PessoaFisica pessoaEncontrada = listaPf.Find(cadaItem => cadaItem.cpf == cpfProcurado);
+
+                        if (pessoaEncontrada != null)
+                        {
+                            listaPf.Remove(pessoaEncontrada);
+                            Console.WriteLine($"Cadastro Removido!");
                         }
                         else
                         {
-                            Console.WriteLine("CNPJ Válido");
+                            Console.WriteLine($"CPF não encontrado!");
+
                         }
 
-                        Console.WriteLine(pJuridica.PagarImposto(novaPjuridica.rendimento));
+                        break;
+
+                    case "4":
+
+                        Console.ResetColor();
+                        PessoaJuridica pj = new PessoaJuridica();
+                        PessoaJuridica novaPj = new PessoaJuridica();
+                        Endereco endPj = new Endereco();
+
+                        Console.WriteLine($"Digite seu logradouro");
+                        endPj.logradouro = Console.ReadLine();
+
+                        Console.WriteLine($"Digite seu numero");
+                        endPj.numero = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine($"Digite seu complemento (aperte ENTER para vazio)");
+                        endPj.complemento = Console.ReadLine();
+
+                        Console.WriteLine($"Seu endereço é Comercial? S/N");
+                        string endComercialPj = Console.ReadLine().ToUpper();
+
+                        if (endComercialPj == "S")
+                        {
+                            endPj.enderecoComercial = true;
+                        }
+                        else
+                        {
+                            endPj.enderecoComercial = false;
+                        }
+
+                        novaPj.endereco = endPj;
+
+                        Console.WriteLine($"Digite seu CNPJ (Somente numeros)");
+                        novaPj.cnpj = Console.ReadLine();
+
+                        Console.WriteLine($"Digite sua Razao Social");
+                        novaPj.RazaoSocial = Console.ReadLine();
+
+                        Console.WriteLine($"Digite seu rendimento mensal (Somente numeros)");
+                        novaPj.rendimento = float.Parse(Console.ReadLine());
+
+
+                        if (pj.ValidarCNPJ(novaPj.cnpj))
+                        {
+                            Console.WriteLine($"CNPJ Valido!");
+                            listaPj.Add(novaPj);
+                            Console.WriteLine($"O valor do Desconto do imposto é de: {pj.PagarImposto(novaPj.rendimento).ToString("N2")} reais");
+
+                        }
+                        else
+                        {
+                            Console.WriteLine($"CNPJ Invalido!");
+                        }
+
+                        break;
+
+                    case "5":
+
+                        foreach (var cadaItem in listaPj)
+                        {
+                            Console.WriteLine($"Razao Social: {cadaItem.RazaoSocial}");
+                            Console.WriteLine($"CNPJ: {cadaItem.cnpj}");
+                            Console.WriteLine($"Logradouro: {cadaItem.endereco.logradouro}");
+                            Console.WriteLine($"Numero: {cadaItem.endereco.numero}");
+                            Console.WriteLine($"Rendimento: {cadaItem.rendimento}");
+                        }
+
+                        break;
+
+                    case "6":
+
+                        Console.WriteLine($"Digite o CNPJ que deseja remover");
+                        string cnpjProcurado = Console.ReadLine();
+
+                        PessoaJuridica pessoaJEncontrada = listaPj.Find(cadaItem => cadaItem.cnpj == cnpjProcurado);
+
+                        if (pessoaJEncontrada != null)
+                        {
+                            listaPj.Remove(pessoaJEncontrada);
+                            Console.WriteLine($"Cadastro Removido!");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"CNPJ não encontrado!");
+
+                        }
 
                         break;
 
                     case "0":
-
-                        Console.WriteLine($"Obrigado por utilizar nosso sistema");
+                        Console.ResetColor();
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine($"Obrigado por utilizar o sistema");
 
                         LoadBar("Finalizando");
 
+                        Console.ResetColor();
                         break;
 
                     default:
