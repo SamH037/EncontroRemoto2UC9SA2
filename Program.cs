@@ -9,15 +9,15 @@ namespace cadastroPessoa
         static void Main(string[] args)
         {
             string opcao;
-            // lista criada de pessoas fisicas, que irão receber os valores registrados pelo usuário
+            // lista criada de pessoas fisicas, que irão receber os valores registrados pelo usuário, pode ser criada dentro do switch, mas nesta situação, em varios momentos, outras funções precisarão de acesso a essa mesma lista
             List<PessoaFisica> listaPf = new List<PessoaFisica>();
             List<PessoaJuridica> listaPj = new List<PessoaJuridica>();
 
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.BackgroundColor = ConsoleColor.Red;
-            Console.WriteLine(@$"
-=================================================
+            Console.WriteLine(
+@$"=================================================
 │       Bem vindo ao Sistema de cadastro de     │
 │           pessoas Fisica e Juridica           │
 ================================================="
@@ -58,18 +58,18 @@ namespace cadastroPessoa
                         Endereco endPf = new Endereco();
 
                         Console.WriteLine($"Digite seu logradouro");
-                        endPf.logradouro = Console.ReadLine();
-
+                        endPf.logradouro = Console.ReadLine(); // aqui recebemos o comando que o usuário coloca, assim como os outros readlines
+                        
                         Console.WriteLine($"Digite seu numero");
-                        endPf.numero = int.Parse(Console.ReadLine());
+                        endPf.numero = int.Parse(Console.ReadLine()); // o metodo Parse, é necessario para converter a informação string para int, ou double, float, etc
 
                         Console.WriteLine($"Digite um complemento (aperte ENTER para vazio)");
                         endPf.complemento = Console.ReadLine();
-
+                        // é necessario perguntar pro usuário se o endereço é comercial ou não, pra isso é preciso que deixe as informações pedidas de forma clara
                         Console.WriteLine($"Seu endereço é Comercial? S/N");
-                        string endComercial = Console.ReadLine().ToUpper();
+                        string endComercial = Console.ReadLine().ToUpper(); // este é o comando para ler a verificação
 
-                        if (endComercial == "S")
+                        if (endComercial == "S") // o if veririca se é true ou false a depender da resposta do usuário
                         {
                             endPf.enderecoComercial = true;
                         }
@@ -88,18 +88,18 @@ namespace cadastroPessoa
                         novaPf.nome = Console.ReadLine();
 
                         Console.WriteLine($"Digite seu rendimento mensal (Somente numeros)");
-                        novaPf.rendimento = float.Parse(Console.ReadLine());
+                        novaPf.rendimento = float.Parse(Console.ReadLine()); // aqui também é necessario a conversão, nesse caso utiliza-se o float para o rendimento
 
                         Console.WriteLine($"Digite sua Data de Nascimento (AAAA-MM-DD)");
                         novaPf.dataNascimento = DateTime.Parse(Console.ReadLine());
 
-                        bool idadeValida = pf.ValidarDataNascimento(novaPf.dataNascimento);
+                        bool idadeValida = pf.ValidarDataNascimento(novaPf.dataNascimento); // aqui nós temos o sistema pegando a data de nascimento colocada, e retornando com o bool
 
-                        if (idadeValida == true)
-                        {
+                        if (idadeValida == true) // só permite o cadastro se a data for valida
+                        { // temos q salvar o cadastro dentro de uma lista, então criamos a lista fora do switch, e aqui precisamos chama-la com o método
                             Console.WriteLine($"Cadastro Aprovado!");
-                            listaPf.Add(novaPf);
-                            Console.WriteLine($"O valor do Desconto do imposto é de: {pf.PagarImposto(novaPf.rendimento).ToString("N2")} reais");
+                            listaPf.Add(novaPf); // aqui informamos o objeto que queremos adicionar na lista criada anteriormente
+                            Console.WriteLine(pf.PagarImposto(novaPf.rendimento));
                         }
                         else
                         {
@@ -108,8 +108,8 @@ namespace cadastroPessoa
 
                         break;
 
-                    case "2":
-
+                    case "2": // para conseguir listar os cadastros, é necessario de uma estrutura de repetição, que utiliza o comando foreach, in (para cada item, em(lista))
+                        // é cirado uma variavel para salvar um item, nesse caso, os items da lista, e o collection que é a lista
                         foreach (var cadaItem in listaPf)
                         {
                             Console.WriteLine($"Nome: {cadaItem.nome}");
@@ -121,22 +121,21 @@ namespace cadastroPessoa
 
                         break;
 
-                    case "3":
-
+                    case "3": // aqui utilizamos o metodo para remover cadastros
+                        // precisamos chamar o objeto cadastrado na lista, assim precisamos de um parametro, que poderia ser um Id, ou o CPF como um numero único
                         Console.WriteLine($"Digite o CPF que deseja remover");
-                        string cpfProcurado = Console.ReadLine();
-
-                        PessoaFisica pessoaEncontrada = listaPf.Find(cadaItem => cadaItem.cpf == cpfProcurado);
-
-                        if (pessoaEncontrada != null)
+                        string cpfProcurado = Console.ReadLine(); // devemos instanciar o item que procuramos, referenciando o item procurado
+                        // precisamos incluir um objeto a ser encontrado, dessa forma, chamamos a classe, que esta sendo salvo na lista (PessoaFisica), e instanciamos um objeto dessa classe no método
+                        PessoaFisica pessoaEncontrada = listaPf.Find(cadaItem => cadaItem.cpf == cpfProcurado); // utilizamos o Find, que é um método parecido com o Foreach com o if, lendo item por item, procurando o parametros que você quer, dessa forma, cada item q ele percorre, vai pegar um item que combine com o que você procura, instanciando os items como "cadaItem", e o cpf como "cpfProcurado"
+                        // precisamos colocar uma validação para encontrar a pessoa encontrada antes
+                        if (pessoaEncontrada != null) // aqui, caso não encontre a pessoa, irá armazenar nulo (null)
                         {
-                            listaPf.Remove(pessoaEncontrada);
+                            listaPf.Remove(pessoaEncontrada); // com esse comando, removemos a pessoa que o método encontrou
                             Console.WriteLine($"Cadastro Removido!");
                         }
                         else
-                        {
+                        { // caso seja igual a nulo, irá mostrar que não encontrou
                             Console.WriteLine($"CPF não encontrado!");
-
                         }
 
                         break;
