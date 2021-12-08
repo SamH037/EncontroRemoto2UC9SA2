@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 
 namespace cadastroPessoa
@@ -57,53 +58,68 @@ namespace cadastroPessoa
                         PessoaFisica novaPf = new PessoaFisica();
                         Endereco endPf = new Endereco();
 
-                        Console.WriteLine($"Digite seu logradouro");
-                        endPf.logradouro = Console.ReadLine(); // aqui recebemos o comando que o usuário coloca, assim como os outros readlines
+                        // Console.WriteLine($"Digite seu logradouro");
+                        // endPf.logradouro = Console.ReadLine(); // aqui recebemos o comando que o usuário coloca, assim como os outros readlines
                         
-                        Console.WriteLine($"Digite seu numero");
-                        endPf.numero = int.Parse(Console.ReadLine()); // o metodo Parse, é necessario para converter a informação string para int, ou double, float, etc
+                        // Console.WriteLine($"Digite seu numero");
+                        // endPf.numero = int.Parse(Console.ReadLine()); // o metodo Parse, é necessario para converter a informação string para int, ou double, float, etc
 
-                        Console.WriteLine($"Digite um complemento (aperte ENTER para vazio)");
-                        endPf.complemento = Console.ReadLine();
-                        // é necessario perguntar pro usuário se o endereço é comercial ou não, pra isso é preciso que deixe as informações pedidas de forma clara
-                        Console.WriteLine($"Seu endereço é Comercial? S/N");
-                        string endComercial = Console.ReadLine().ToUpper(); // este é o comando para ler a verificação
+                        // Console.WriteLine($"Digite um complemento (aperte ENTER para vazio)");
+                        // endPf.complemento = Console.ReadLine();
+                        // // é necessario perguntar pro usuário se o endereço é comercial ou não, pra isso é preciso que deixe as informações pedidas de forma clara
+                        // Console.WriteLine($"Seu endereço é Comercial? S/N");
+                        // // string endComercial = Console.ReadLine().ToUpper(); // este é o comando para ler a verificação
 
-                        if (endComercial == "S") // o if veririca se é true ou false a depender da resposta do usuário
-                        {
-                            endPf.enderecoComercial = true;
-                        }
-                        else
-                        {
-                            endPf.enderecoComercial = false;
-                        }
+                        // if (endComercial == "S") // o if veririca se é true ou false a depender da resposta do usuário
+                        // {
+                        //     endPf.enderecoComercial = true;
+                        // }
+                        // else
+                        // {
+                        //     endPf.enderecoComercial = false;
+                        // }
 
 
-                        novaPf.endereco = endPf;
+                        // novaPf.endereco = endPf;
 
-                        Console.WriteLine($"Digite seu CPF (Somente numeros)");
-                        novaPf.cpf = Console.ReadLine();
+                        // Console.WriteLine($"Digite seu CPF (Somente numeros)");
+                        // novaPf.cpf = Console.ReadLine();
 
                         Console.WriteLine($"Digite seu Nome completo");
                         novaPf.nome = Console.ReadLine();
 
-                        Console.WriteLine($"Digite seu rendimento mensal (Somente numeros)");
-                        novaPf.rendimento = float.Parse(Console.ReadLine()); // aqui também é necessario a conversão, nesse caso utiliza-se o float para o rendimento
+                        // Console.WriteLine($"Digite seu rendimento mensal (Somente numeros)");
+                        // novaPf.rendimento = float.Parse(Console.ReadLine()); // aqui também é necessario a conversão, nesse caso utiliza-se o float para o rendimento
 
-                        Console.WriteLine($"Digite sua Data de Nascimento (AAAA-MM-DD)");
-                        novaPf.dataNascimento = DateTime.Parse(Console.ReadLine());
+                        // Console.WriteLine($"Digite sua Data de Nascimento (AAAA-MM-DD)");
+                        // novaPf.dataNascimento = DateTime.Parse(Console.ReadLine());
 
-                        bool idadeValida = pf.ValidarDataNascimento(novaPf.dataNascimento); // aqui nós temos o sistema pegando a data de nascimento colocada, e retornando com o bool
+                        // bool idadeValida = pf.ValidarDataNascimento(novaPf.dataNascimento); // aqui nós temos o sistema pegando a data de nascimento colocada, e retornando com o bool
 
-                        if (idadeValida == true) // só permite o cadastro se a data for valida
-                        { // temos q salvar o cadastro dentro de uma lista, então criamos a lista fora do switch, e aqui precisamos chama-la com o método
-                            Console.WriteLine($"Cadastro Aprovado!");
-                            listaPf.Add(novaPf); // aqui informamos o objeto que queremos adicionar na lista criada anteriormente
-                            Console.WriteLine(pf.PagarImposto(novaPf.rendimento));
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Cadastro Reprovado!");
+                        // if (idadeValida == true) // só permite o cadastro se a data for valida
+                        // { // temos q salvar o cadastro dentro de uma lista, então criamos a lista fora do switch, e aqui precisamos chama-la com o método
+                        //     Console.WriteLine($"Cadastro Aprovado!");
+                        //     listaPf.Add(novaPf); // aqui informamos o objeto que queremos adicionar na lista criada anteriormente
+                        //     Console.WriteLine(pf.PagarImposto(novaPf.rendimento));
+                        // }
+                        // else
+                        // {
+                        //     Console.WriteLine($"Cadastro Reprovado!");
+                        // }
+                        // a biblioteca/classe StreamWriter é uma forma de criar um arquivo para um tipo de dado registrado
+                        // using (StreamWriter sw = new StreamWriter($"{novaPf.nome}.txt")) // nesse caso, criamos a Pf, o usuário vai entrar com o nome dela, devemos também informar o tipo do arquivo
+                        // {
+                        //     sw.Write($"{novaPf.nome}"); // para eliminar a utilização do close, por precisar de fechar o arquivo, se utiliza esse tipo de processo
+                        // }
+
+                        using (StreamReader sr = new StreamReader($"{novaPf.nome}.txt")) // esse comando é feito para ler o arquivo
+                        { // é necessario criar uma estrutura de repetição, nela, seria bom colocar uma forma de validar se a primeira linha tem algo escrito para assim poder ler o arquivo ou não, se cria sempre uma variavel antes do while, nesse caso linha
+                            string linha;
+                            
+                            while ((linha = sr.ReadLine()) != null) // esse comando diz para ler a linha do arquivo antes para depois comparar se é diferente de nulo, note o comando inicial entre parentese
+                            {
+                                Console.WriteLine($"{linha}");
+                            }
                         }
 
                         break;
@@ -191,6 +207,14 @@ namespace cadastroPessoa
                         {
                             Console.WriteLine($"CNPJ Invalido!");
                         }
+                        // como ja fizemos o metodo na subclasse, apenas colocamos estes dois métodos aqui no program
+                        pj.VerificarArquivo(pj.caminho);
+                        pj.Inserir(novaPj);
+                            
+                            foreach (var item in novaPj.Ler())
+                            {
+                                Console.WriteLine($"Nome: {item.nome} - Razão Social:{item.RazaoSocial} - CNPJ: {item.cnpj}");   
+                            }
 
                         break;
 
